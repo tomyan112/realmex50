@@ -1,0 +1,115 @@
+@echo off
+TITLE Realme X50 TWRP Recovery 刷入工具 By 极客盟 - 番茄小子
+color 3f
+mode con cols=90 lines=35
+SET adb=.\adb\adb.exe
+SET fastboot=.\adb\fastboot.exe
+:STARTS
+CLS
+ECHO.
+ECHO. Realme X50 TWRP Recovery 刷入工具 By 极客盟 - 番茄小子
+ECHO.
+ECHO. ======================================================================================
+ECHO. 注意：
+ECHO.   1.请确定已经打开USB调试和OEM解锁模式并安装好ADB驱动
+ECHO.   2.手机连接电脑提示USB调试授权时勾选始终点击授权
+ECHO.   3.运行本程序时请关闭电脑上各种安卓模拟器及手机管理软件
+ECHO.   4.Recovery专机专用，请勿把本Recovery刷入非匹配机型
+ECHO. ======================================================================================
+ECHO.
+ECHO.       请选择你的操作?
+ECHO.
+ECHO.                    1.安装Realme手机刷机驱动
+ECHO.
+ECHO.                    2.Realme手机解锁BootLoader教程
+ECHO.
+ECHO.                    3.Realme X50手机刷入TWRP Recovery 3.4.1B
+ECHO.
+ECHO.                    4.查看安卓刷机图文教程
+ECHO.
+ECHO.                    5.付费远程刷机 救砖 解各种锁
+ECHO.
+ECHO.                    6.访问极客盟网站获取更多资源
+ECHO.
+ECHO.                    7.赞助极客盟帮助网站生存下去
+ECHO.
+ECHO.                    0.完成退出
+ECHO.
+ECHO. ======================================================================================
+:CHO
+set choice=
+set /p choice= 输入对应数字，然后按回车键:
+if /i "%choice%"=="1" goto ADB
+if /i "%choice%"=="2" goto JSBL
+if /i "%choice%"=="3" goto RECOVERYL
+if /i "%choice%"=="4" goto JIAOCHENG
+if /i "%choice%"=="5" goto YUANCHENG
+if /i "%choice%"=="6" goto FANGWEN
+if /i "%choice%"=="7" goto ZANZHU
+if /i "%choice%"=="0" goto SECEDE
+echo 选择无效，请重新输入
+echo.
+GOTO STARTS
+
+:ADB
+bujian\oppo-qudong.exe
+GOTO STARTS
+
+:JSBL
+START https://www.jkmeng.cn/tag/realme-unlock
+GOTO STARTS
+
+:RECOVERYL
+CLS
+Taskkill /F /IM adb.exe >nul 2>nul
+Taskkill /F /IM tadb.exe >nul 2>nul
+Taskkill /F /IM kwAdb.exe >nul 2>nul
+%adb% kill-server >NUL 2>NUL
+ECHO. --- 等待设备
+ECHO.     如果一直卡在这边:
+ECHO.     请确定已打开USB调试并安装驱动
+ECHO.
+%adb% wait-for-device >NUL 2>NUL
+ECHO. --- 发现设备
+ECHO.     稍后手机将会进入fastboot模式
+ECHO.
+%adb% reboot bootloader
+ECHO. --- 等待设备
+ECHO.
+ECHO ***************************************************************************************
+ECHO *      如果一直卡在 ^< waiting for device ^> （正常情况下一分钟以内）                 *
+ECHO *                                                                                     *
+ECHO *      如果长时间卡住代表驱动异常，请安装FASTBOOT驱动                                 *
+ECHO ***************************************************************************************
+ECHO.
+ECHO. 自动刷写TWRP-Recovery开始...
+ECHO.
+%fastboot% devices
+%fastboot% flash recovery twrp\recovery.img
+ECHO.
+ECHO. 如果以上出现“... OKAY”字样则表示刷入成功，手机将重启到recovery...
+ECHO.
+%fastboot% flash misc bujian\misc.bin
+%fastboot% reboot
+ECHO.
+pause
+GOTO STARTS
+
+:JIAOCHENG
+START https://www.jkmeng.cn/230.html
+GOTO STARTS
+
+:YUANCHENG
+START https://www.jkmeng.cn/172.html
+GOTO STARTS
+
+:FANGWEN
+START https://www.jkmeng.cn/
+GOTO STARTS
+
+:ZANZHU
+START https://www.jkmeng.cn/7841.html
+GOTO STARTS
+
+:SECEDE
+exit
